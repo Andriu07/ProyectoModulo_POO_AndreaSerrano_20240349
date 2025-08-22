@@ -6,7 +6,6 @@ import ANDREASERRANO_20240349.ANDREASERRANO_20240349.Service.LibrosService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -59,17 +58,17 @@ public class LibrosController {
 
     }
 
-    @PutMapping("/editarLibro/{id_libro}")
-        public ResponseEntity<?> modificarLibro(@PathVariable Long id_libro, @Valid @RequestBody LibrosDTO json, BindingResult bindingResult){
+    @PutMapping("/editarLibro/{id}")
+        public ResponseEntity<?> modificarLibro(@PathVariable Long id, @Valid @RequestBody LibrosDTO json, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             Map<String , String > errores = new HashMap<>();
             bindingResult.getFieldErrors().forEach(
-                 error -> errores.put(error.getField(), error.getDefaultMessage());
+                 error -> errores.put(error.getField(), error.getDefaultMessage()));
                  return ResponseEntity.badRequest().body(errores);
         }
 
         try{//ACTUALIZAR EL LIBRO LLAMANDO AL SEVRICE Y GUARDANDO EL RESULTADO EN UN DTO
-            LibrosDTO dto = service.actualizarLibro(id_libro, json);
+            LibrosDTO dto = service.actualizarLibro(id, json);
             //si sale bien retornar HTTP 200(OK)
             return ResponseEntity.ok(dto);
         }
@@ -85,10 +84,10 @@ public class LibrosController {
 
 
     //eliminar
-    @DeleteMapping("/eliminarLibro/{id_libro}")
-    public ResponseEntity<?> eliminarLibro(@PathVariable Long id_libro) {
+    @DeleteMapping("/eliminarLibro/{id}")
+    public ResponseEntity<?> eliminarLibro(@PathVariable Long id) {
         try {
-            if (!service.removerLibro(id_libro)) {
+            if (!service.removerLibro(id)) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).header("mensaje de error", "libro no encontrado").body(Map.of(
                         "error", "NOT FOUND ",
                         "message", "EL libro  no fue encontrado",

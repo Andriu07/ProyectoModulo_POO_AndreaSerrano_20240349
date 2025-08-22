@@ -19,7 +19,7 @@ import java.math.BigInteger;
 @ToString
 public class LibrosDTO {
 
-    private Long id_libros;
+    private Long id;
 
     @NotBlank(message = "El titulo no puede estar vacio")
     private String titulo;
@@ -34,5 +34,5 @@ public class LibrosDTO {
     private String genero;
 
     @NotNull(message = " Id_autor no puede contener valores nulos ")
-    private BigInteger autor_id;
+    private Long id_autor;
 }

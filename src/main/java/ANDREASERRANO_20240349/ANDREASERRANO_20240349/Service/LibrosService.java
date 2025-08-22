@@ -30,19 +30,19 @@ public class LibrosService {
 
     private LibrosDTO convertirADTO(LibrosEntity librosEntity) {
         LibrosDTO dto = new LibrosDTO();
-        dto.setId_libros(librosEntity.getId_libros());
+        dto.setId(librosEntity.getId());
         dto.setTitulo(librosEntity.getTitulo());
         dto.setIsbn(librosEntity.getIsbn());
-        dto.setAño_publicacion(librosEntity.getAño_publicacion());
+        dto.setAnio_publicacion(librosEntity.getAnio_publicacion());
         dto.setGenero(librosEntity.getGenero());
-        dto.setAutor_id(librosEntity.getAutor_id());
+        dto.setId_autor(librosEntity.getId_autor());
         return dto;
     }
 
 
     public LibrosDTO InsertarDatos(LibrosDTO data){
         if(data == null || data.getTitulo() == null || data.getTitulo().isEmpty()||
-        data.getAutor_id() == null || data.getGenero() == null || data.getGenero().isEmpty()){
+        data.getId() == null || data.getGenero() == null || data.getGenero().isEmpty()){
             throw new IllegalArgumentException("Libro,Titulo de Libro ,ISBN Y ID_Autor no pueden ser nulos");
         }
         try{
@@ -57,25 +57,25 @@ public class LibrosService {
 
     private LibrosEntity convertirAEntity(LibrosDTO data) {
         LibrosEntity entity =new LibrosEntity();
-        entity.setId_libros(data.getId_libros());
+        entity.setId(data.getId());
         entity.setTitulo(data.getTitulo());
         entity.setIsbn(data.getIsbn());
         entity.setAño_publicacion(data.getAño_publicacion());
         entity.setGenero(data.getGenero());
-        entity.setAutor_id(data.getAutor_id());
+        entity.setId(data.getId());
         return entity;
     }
 
 
-    public LibrosDTO actualizarLibro(Long id_Libro, @Valid LibrosDTO json){
+    public LibrosDTO actualizarLibro(Long id, @Valid LibrosDTO json){
         //verificar existencia
-        LibrosEntity existente = repository.findById(id_Libro).orElseThrow(() -> new ExceptionBookNotFound("Libro no encontrado"));
-        existente.setId_libros(json.getId_libros());
+        LibrosEntity existente = repository.findById(id).orElseThrow(() -> new ExceptionBookNotFound("Libro no encontrado"));
+        existente.setId(json.getId());
         existente.setTitulo(json.getTitulo());
         existente.setIsbn(json.getIsbn());
         existente.setAño_publicacion(json.getAño_publicacion());
         existente.setGenero(json.getGenero());
-        existente.setAutor_id(json.getAutor_id());
+        existente.setId(json.getId());
         //guardar nuevos valores
         LibrosEntity libroActualizado = repository.save(existente);
         //convertir entity a dto
@@ -84,27 +84,29 @@ public class LibrosService {
 
 
 
-    public boolean removerLibro(Long id_libro){
+    public boolean removerLibro(Long id){
         try{
-            LibrosEntity existente = repository.findById(id_libro).orElse(null);
+            LibrosEntity existente = repository.findById(id).orElse(null);
             if (existente != null){
-                repository.deleteById(id_libro);
+                repository.deleteById(id);
                 return true;
             }else{
                 return false;
             }
-        }catch (EmptyResultDataAccessException) {
-            ("No se encontro libro con el id  " + id_libro "para eliminar " + 1));}
+        }catch (EmptyResultDataAccessException e) {
+            throw new EmptyResultDataAccessException("No se encontro libro con el id " + id + "para eliminar " , 1);
+
+        }
     }
 
     //Metodo search
 
-    public LibrosDTO getSolutionByID(Long id_libro){
-        Optional<LibrosEntity> libroOptional = accesLibrosRepository.FindById(id_libro);
+    public LibrosDTO getSolutionByID(Long id){
+        Optional<LibrosEntity> libroOptional = repository.FindById(id);
         if (libroOptional.isPresent()){
             return convertirADTO(libroOptional.get());
         }else {
-            throw new EntityNotFoundException("No se encontro libro con el id: " + id_libro)
+            throw new EntityNotFoundException("No se encontro libro con el id: " + id);
         }
     }
 }
