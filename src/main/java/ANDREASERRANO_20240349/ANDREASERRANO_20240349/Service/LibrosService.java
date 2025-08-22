@@ -33,7 +33,7 @@ public class LibrosService {
         dto.setId(librosEntity.getId());
         dto.setTitulo(librosEntity.getTitulo());
         dto.setIsbn(librosEntity.getIsbn());
-        dto.setAnio_publicacion(librosEntity.getAnio_publicacion());
+        dto.setAño_publicacion(Long.valueOf(librosEntity.getAño_publicacion()));
         dto.setGenero(librosEntity.getGenero());
         dto.setId_autor(librosEntity.getId_autor());
         return dto;
@@ -60,7 +60,7 @@ public class LibrosService {
         entity.setId(data.getId());
         entity.setTitulo(data.getTitulo());
         entity.setIsbn(data.getIsbn());
-        entity.setAño_publicacion(data.getAño_publicacion());
+        entity.setAño_publicacion(String.valueOf(data.getAño_publicacion()));
         entity.setGenero(data.getGenero());
         entity.setId(data.getId());
         return entity;
@@ -73,7 +73,7 @@ public class LibrosService {
         existente.setId(json.getId());
         existente.setTitulo(json.getTitulo());
         existente.setIsbn(json.getIsbn());
-        existente.setAño_publicacion(json.getAño_publicacion());
+        existente.setAño_publicacion(String.valueOf(json.getAño_publicacion()));
         existente.setGenero(json.getGenero());
         existente.setId(json.getId());
         //guardar nuevos valores
